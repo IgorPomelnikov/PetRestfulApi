@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Dog.App.Attributes;
 
 namespace Dog.App.Models;
 
+[NameHasToBeDifferentFromKind]
 public abstract class DogBaseDto
 {
     [Required]
