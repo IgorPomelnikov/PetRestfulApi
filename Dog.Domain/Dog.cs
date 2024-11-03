@@ -14,4 +14,7 @@ public class Dog
     [Required]
     [MaxLength(10)]
     public string Kind { get; set; } = string.Empty;
+
+    [Required]
+    public DateTime DateOfBirth { get; set; }
 }
