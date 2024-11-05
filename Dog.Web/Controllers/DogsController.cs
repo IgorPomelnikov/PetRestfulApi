@@ -3,6 +3,7 @@ using Dog.App.Repositories;
 using Dog.Web.Filters;
 using Dog.Web.Heplers;
 using Dog.Web.Models;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,8 @@ namespace Dog.Web.Controllers;
 [Route("api/dogs")]
 public class DogsController(IDogRepository repository, IMapper mapper) : ControllerBase
 {
-    [HttpGet("{id:int}", Name = "GetDog")]
+    [Route("{id:int}", Name = "GetDog")]
+    [HttpGet]
     [HttpHead]
     [TypeFilter(typeof(DogResultFilter))]
     public async Task<IActionResult> GetDog(int id)
@@ -27,7 +29,9 @@ public class DogsController(IDogRepository repository, IMapper mapper) : Control
     {
         throw new NotImplementedException();
     }
-    [HttpGet("({bulkIds})", Name = "GetDogsCollection")]
+    
+    [Route("({bulkIds})", Name = "GetDogsCollection")]
+    [HttpGet]
     [HttpHead]
     public async Task<IActionResult> GetBulkDogs([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<int> bulkIds)
     {
@@ -37,10 +41,9 @@ public class DogsController(IDogRepository repository, IMapper mapper) : Control
     [HttpGet("dogstream")]
     public async IAsyncEnumerable<DogDto> GetDogsStream()
     {
-        var dogsEnumAsync = repository.GetAllDogs();
-        await foreach (var dog in dogsEnumAsync)
+        await foreach (var dog in repository.GetAllDogs())
         {
-            await Task.Delay(300);
+            await Task.Delay(100);
             yield return mapper.Map<DogDto>(dog);
         }
     }

@@ -27,7 +27,7 @@ public class DogRepository(DogContext context) : IDogRepository
 
     public IAsyncEnumerable<Domain.Dog> GetAllDogs()
     {
-        return context.Dogs.AsAsyncEnumerable(); 
+        return context.Dogs.AsNoTracking().AsAsyncEnumerable<Domain.Dog>(); 
     }
 
     public async Task<bool> UpdateDog(Domain.Dog dog)

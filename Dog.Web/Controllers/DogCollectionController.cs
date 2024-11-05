@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Dog.Web.Controllers;
 
 [ApiController]
+[Route("api/[controller]")]
 public class DogCollectionController(IDogRepository repository) : ControllerBase
 {
     private readonly IDogRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));

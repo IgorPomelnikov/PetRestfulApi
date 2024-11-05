@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using Dog.App.Repositories;
+using Dog.Infrastructure;
 using Dog.Infrastructure.Repositories;
 using Dog.Web.Services;
 using Microsoft.AspNetCore.Diagnostics;
@@ -59,10 +61,14 @@ builder.Services.Configure<MvcOptions>(configure =>
     }
 });
 builder.Services.AddTransient<IPropertyMappingService, PropertyMappingService>();
-builder.Services.AddDbContext<DbContext>(options =>
+builder.Services.AddDbContext<DogContext>(options =>
 {
-    options.UseSqlite(@"Data Source=library.db");
+    options.UseSqlite(@"Data Source=Dog.db");
 });
+
+var ctx = builder.Services.BuildServiceProvider().GetRequiredService<DogContext>();
+ctx.Database.EnsureCreated();
+
 builder.Services.AddAutoMapper(
     AppDomain.CurrentDomain.GetAssemblies());
 
@@ -80,7 +86,8 @@ builder.Services.AddHttpCacheHeaders(
         validationModelOptions.MustRevalidate = true;
     });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IDogRepository, DogRepository>();
+builder.Services.AddTransient<IDogRepository, DogRepository>();
+
 
 #endregion
 
