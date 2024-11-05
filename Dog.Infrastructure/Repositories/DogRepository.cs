@@ -25,6 +25,11 @@ public class DogRepository(DogContext context) : IDogRepository
         return await context.SaveChangesAsync();
     }
 
+    public IAsyncEnumerable<Domain.Dog> GetAllDogs()
+    {
+        return context.Dogs.AsAsyncEnumerable(); 
+    }
+
     public async Task<bool> UpdateDog(Domain.Dog dog)
     {
         context.Entry(dog).State = EntityState.Modified;

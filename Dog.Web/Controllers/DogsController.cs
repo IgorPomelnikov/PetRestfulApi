@@ -1,3 +1,5 @@
+using AutoMapper;
+using Dog.App.Repositories;
 using Dog.Web.Filters;
 using Dog.Web.Heplers;
 using Dog.Web.Models;
@@ -8,7 +10,7 @@ namespace Dog.Web.Controllers;
 
 [ApiController]
 [Route("api/dogs")]
-public class DogsController : ControllerBase
+public class DogsController(IDogRepository repository, IMapper mapper) : ControllerBase
 {
     [HttpGet("{id:int}", Name = "GetDog")]
     [HttpHead]
@@ -30,6 +32,17 @@ public class DogsController : ControllerBase
     public async Task<IActionResult> GetBulkDogs([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<int> bulkIds)
     {
         throw new NotImplementedException();
+    }
+
+    [HttpGet("dogstream")]
+    public async IAsyncEnumerable<DogDto> GetDogsStream()
+    {
+        var dogsEnumAsync = repository.GetAllDogs();
+        await foreach (var dog in dogsEnumAsync)
+        {
+            await Task.Delay(300);
+            yield return mapper.Map<DogDto>(dog);
+        }
     }
     
     [HttpPost]
