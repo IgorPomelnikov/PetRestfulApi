@@ -1,4 +1,3 @@
-using Dog.App.Models;
 using Dog.Web.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

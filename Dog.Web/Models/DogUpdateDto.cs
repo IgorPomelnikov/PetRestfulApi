@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Dog.App.Models;
+namespace Dog.Web.Models;
 
 public class DogUpdateDto : DogBaseDto
 {

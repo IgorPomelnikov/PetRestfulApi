@@ -1,4 +1,4 @@
-namespace Dog.App.Models;
+namespace Dog.Web.Models;
 
 public class DogDto : DogBaseDto
 {

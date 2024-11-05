@@ -1,8 +1,8 @@
 using AutoMapper;
 using Dog.App.Extensions;
-using Dog.App.Models;
+using Dog.Web.Models;
 
-namespace Dog.App.Profiles;
+namespace Dog.Web.Profiles;
 
 public class DogProfile : Profile
 {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Dog.App.Attributes;
+using Dog.Web.Attributes;
 
-namespace Dog.App.Models;
+namespace Dog.Web.Models;
 
 [NameHasToBeDifferentFromKind]
 public abstract class DogBaseDto

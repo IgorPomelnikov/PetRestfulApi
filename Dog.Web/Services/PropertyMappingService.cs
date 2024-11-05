@@ -1,4 +1,4 @@
-using Dog.App.Models;
+using Dog.Web.Models;
 
 namespace Dog.Web.Services;
 

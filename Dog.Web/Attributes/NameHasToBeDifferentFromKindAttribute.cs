@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Dog.App.Models;
+using Dog.Web.Models;
 
-namespace Dog.App.Attributes;
+namespace Dog.Web.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class NameHasToBeDifferentFromKindAttribute
