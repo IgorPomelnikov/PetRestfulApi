@@ -1,3 +1,5 @@
+using Dog.Web.Filters;
+using Dog.Web.Heplers;
 using Dog.Web.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ public class DogsController : ControllerBase
 {
     [HttpGet("{id:int}", Name = "GetDog")]
     [HttpHead]
+    [TypeFilter(typeof(DogResultFilter))]
     public async Task<IActionResult> GetDog(int id)
     {
         throw new NotImplementedException();
@@ -17,7 +20,14 @@ public class DogsController : ControllerBase
     
     [HttpGet]
     [HttpHead]
+    [TypeFilter(typeof(DogsResultFilter))]
     public async Task<IActionResult> GetDogs()
+    {
+        throw new NotImplementedException();
+    }
+    [HttpGet("({bulkIds})", Name = "GetDogsCollection")]
+    [HttpHead]
+    public async Task<IActionResult> GetBulkDogs([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<int> bulkIds)
     {
         throw new NotImplementedException();
     }
@@ -27,6 +37,7 @@ public class DogsController : ControllerBase
     {
         throw new NotImplementedException();
     }
+
     
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateDog(int id, DogUpdateDto dog)

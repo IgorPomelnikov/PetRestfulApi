@@ -77,6 +77,7 @@ builder.Services.AddHttpCacheHeaders(
     {
         validationModelOptions.MustRevalidate = true;
     });
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
 
 var app = builder.Build();
