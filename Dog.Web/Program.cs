@@ -1,3 +1,5 @@
+using Dog.App.Repositories;
+using Dog.Infrastructure.Repositories;
 using Dog.Web.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -78,6 +80,8 @@ builder.Services.AddHttpCacheHeaders(
         validationModelOptions.MustRevalidate = true;
     });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IDogRepository, DogRepository>();
+
 #endregion
 
 var app = builder.Build();
