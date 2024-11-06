@@ -3,7 +3,6 @@ using Dog.App.Repositories;
 using Dog.Web.Filters;
 using Dog.Web.Heplers;
 using Dog.Web.Models;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,30 +12,41 @@ namespace Dog.Web.Controllers;
 [Route("api/dogs")]
 public class DogsController(IDogRepository repository, IMapper mapper) : ControllerBase
 {
-    [Route("{id:int}", Name = "GetDog")]
+    // [Route("{id:int}", Name = "GetDog")]
+    // [HttpGet]
+    // [HttpHead]
+    // [TypeFilter(typeof(DogResultFilter))]
+    // public async Task<IActionResult> GetDog(int id)
+    // {
+    //     throw new NotImplementedException();
+    // }
+
     [HttpGet]
-    [HttpHead]
-    [TypeFilter(typeof(DogResultFilter))]
-    public async Task<IActionResult> GetDog(int id)
+    [Route("/{dogId:int}/withtoy", Name = "GetDogWithToy")]
+    [TypeFilter(typeof(DogWithToysFilter))]
+    public async Task<IActionResult> GetDogWithToy(int dogId)
     {
-        throw new NotImplementedException();
+        var dogEntity = await repository.GetDog(dogId);
+        var toy = await repository.GetPetsToy(dogId);
+        return Ok((dogEntity, toy));
+        
     }
     
-    [HttpGet]
-    [HttpHead]
-    [TypeFilter(typeof(DogsResultFilter))]
-    public async Task<IActionResult> GetDogs()
-    {
-        throw new NotImplementedException();
-    }
-    
-    [Route("({bulkIds})", Name = "GetDogsCollection")]
-    [HttpGet]
-    [HttpHead]
-    public async Task<IActionResult> GetBulkDogs([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<int> bulkIds)
-    {
-        throw new NotImplementedException();
-    }
+    // [HttpGet]
+    // [HttpHead]
+    // [TypeFilter(typeof(DogsResultFilter))]
+    // public async Task<IActionResult> GetDogs()
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // [Route("({bulkIds})", Name = "GetDogsCollection")]
+    // [HttpGet]
+    // [HttpHead]
+    // public async Task<IActionResult> GetBulkDogs([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<int> bulkIds)
+    // {
+    //     throw new NotImplementedException();
+    // }
 
     [HttpGet("dogstream")]
     public async IAsyncEnumerable<DogDto> GetDogsStream()
@@ -48,32 +58,32 @@ public class DogsController(IDogRepository repository, IMapper mapper) : Control
         }
     }
     
-    [HttpPost]
-    public async Task<IActionResult> CreateDog(DogCreateDto dog)
-    {
-        throw new NotImplementedException();
-    }
-
-    
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateDog(int id, DogUpdateDto dog)
-    {
-        throw new NotImplementedException();
-    }
-    [HttpPatch("{id:int}")]
-    public async Task<IActionResult> UpdateDog(int id, JsonPatchDocument<DogUpdateDto> dog)
-    {
-        throw new NotImplementedException();
-    }
-    
-    [HttpOptions]
-    public async Task<IActionResult> GetOptions()
-    {
-        throw new NotImplementedException();
-    }
-
-    private IEnumerable<LinkDto> GetLinks()
-    {
-        throw new NotImplementedException();
-    }
+    // [HttpPost]
+    // public async Task<IActionResult> CreateDog(DogCreateDto dog)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    //
+    // [HttpPut("{id:int}")]
+    // public async Task<IActionResult> UpdateDog(int id, DogUpdateDto dog)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    // [HttpPatch("{id:int}")]
+    // public async Task<IActionResult> UpdateDog(int id, JsonPatchDocument<DogUpdateDto> dog)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // [HttpOptions]
+    // public async Task<IActionResult> GetOptions()
+    // {
+    //     throw new NotImplementedException();
+    // }
+    //
+    // private IEnumerable<LinkDto> GetLinks()
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

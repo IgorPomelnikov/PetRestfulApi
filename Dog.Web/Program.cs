@@ -24,7 +24,7 @@ builder.Services.AddControllers(configure =>
         configure.ReturnHttpNotAcceptable = true;
         configure.CacheProfiles.Add("240SecondsCacheProfile",
             new() { Duration = 240 });
-    }).AddNewtonsoftJson(setupAction =>
+    }).AddNewtonsoftJson(setupAction => //из-за этого не работает iasyncEnumerable
     {
         setupAction.SerializerSettings.ContractResolver =
             new CamelCasePropertyNamesContractResolver();
@@ -87,7 +87,7 @@ builder.Services.AddHttpCacheHeaders(
     });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<IDogRepository, DogRepository>();
-
+builder.Services.AddHttpClient();
 
 #endregion
 

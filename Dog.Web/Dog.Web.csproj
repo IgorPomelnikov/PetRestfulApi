@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\Dog.App\Dog.App.csproj" />
       <ProjectReference Include="..\Dog.Infrastructure\Dog.Infrastructure.csproj" />
     </ItemGroup>
