@@ -21,22 +21,36 @@ public class DogRepository(DogContext context, IHttpClientFactory httpClient) : 
         return dogs;
     }
 
-    public async Task<PetsToyDto?> GetPetsToy(int dogId)
+    public Task<PetsToyDto?> GetDogWithToy(int dogId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<PetsToyDto?> GetPetsToy(int dogId, CancellationToken cancellationToken)
     {
         var client = httpClient.CreateClient();
-        var response = await client.GetAsync($"http://localhost:5009/api/toys/{dogId}");
+        using var token = new CancellationTokenSource();
+        using var linkedCancellationToken =
+            CancellationTokenSource.CreateLinkedTokenSource(token.Token, cancellationToken);
+        var response = await client.GetAsync($"http://localhost:5009/api/toys/{dogId}", linkedCancellationToken.Token);
         if (response.IsSuccessStatusCode)
         {
-            return JsonSerializer.Deserialize<PetsToyDto>(await response.Content.ReadAsStringAsync(),
+            return JsonSerializer.Deserialize<PetsToyDto>(await response.Content.ReadAsStringAsync(linkedCancellationToken.Token),
                 new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
         }
+        else
+        {
+            await token.CancelAsync();
+        }
+
+        await Task.Delay(2000, linkedCancellationToken.Token);
         return null;
     }
 
-    public async Task<PetsToyDto?> GetDogWithToy(int dogId)
+    public async Task<PetsToyDto?> GetDogWithToy(int dogId, CancellationToken cancellationToken)
     {
         var client = httpClient.CreateClient();
         var response = await client.GetAsync($"http://localhost:5009/api/toys/{dogId}");

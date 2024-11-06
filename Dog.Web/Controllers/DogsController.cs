@@ -24,10 +24,10 @@ public class DogsController(IDogRepository repository, IMapper mapper) : Control
     [HttpGet]
     [Route("/{dogId:int}/withtoy", Name = "GetDogWithToy")]
     [TypeFilter(typeof(DogWithToysFilter))]
-    public async Task<IActionResult> GetDogWithToy(int dogId)
+    public async Task<IActionResult> GetDogWithToy(int dogId, CancellationToken cancellationToken)
     {
         var dogEntity = await repository.GetDog(dogId);
-        var toy = await repository.GetPetsToy(dogId);
+        var toy = await repository.GetPetsToy(dogId, cancellationToken);
         return Ok((dogEntity, toy));
         
     }

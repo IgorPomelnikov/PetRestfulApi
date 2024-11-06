@@ -24,8 +24,9 @@ var toys = new List<PetsToyDto>()
     new() { OwnerId = 4, Name = "Donout" },
 };
 
-app.MapGet("/api/toys/{id:int}", (int id) =>
+app.MapGet("/api/toys/{id:int}", async (int id) =>
     {
+        await Task.Delay(500);
         return toys.First(x => x.OwnerId == id);
     })
     .WithName("GetWeatherForecast")
