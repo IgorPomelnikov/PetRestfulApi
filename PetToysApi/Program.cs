@@ -1,4 +1,7 @@
 using Contracts;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.OpenApi.Models;
+using PetToysApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication().AddJwtBearer(); //paste to the terminal: dotnet user-jwts create --audience "toy-api" --role Admin --claim "TestClaim=yes"
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("TestPolicy",policy => 
+        policy
+            .RequireRole("Admin")
+            .RequireClaim("TestClaim", "yes"));
 
 var app = builder.Build();
 
@@ -23,14 +34,39 @@ var toys = new List<PetsToyDto>()
     new() { OwnerId = 3, Name = "Stick" },
     new() { OwnerId = 4, Name = "Donout" },
 };
-
-app.MapGet("/api/toys/{id:int}", async (int id) =>
+var api = app.MapGroup("/api");
+api.MapGet("/toys/{id:int}", async Task<Results<NotFound, Ok<PetsToyDto>>>(int id) =>
     {
         await Task.Delay(500);
-        return toys.First(x => x.OwnerId == id);
+        var result = toys.FirstOrDefault(x => x.OwnerId == id);
+        if(result == null)
+            return TypedResults.NotFound();
+        return TypedResults.Ok(result);
     })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+    .WithName("GetToysForPet")
+    .WithOpenApi()
+    .AddEndpointFilter<BadDogFilter>();
 
+api.MapPost("/toys", async Task<CreatedAtRoute<PetsToyDto>> (PetsToyDto petToyDto) =>
+{
+    await Task.Delay(500);
+    toys.Add(petToyDto);
+    return TypedResults.CreatedAtRoute(petToyDto, "GetToysForPet", new{id=petToyDto.OwnerId});
+});
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/test-jwt", () =>
+    {
+        return TypedResults.Ok("ok");
+    }).RequireAuthorization("testPolicy")
+    .WithOpenApi(opt =>
+    {
+        opt.Deprecated = true;
+        opt.Parameters = new List<OpenApiParameter>(){new OpenApiParameter(){Name = "param", Description = "test desription"}};
+        return opt;
+    })
+    .ProducesProblem(StatusCodes.Status403Forbidden);
 app.Run();
 
