@@ -4,6 +4,12 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers><!--это анализатор, который напоминает экспоузить статус коды явно-->
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>Dog.Web.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
